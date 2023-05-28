@@ -1,1 +1,15 @@
 @import "./scss/bootrsap";
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+main {
+    min-height: 90vh;
+    flex: 1 0 auto;
+}

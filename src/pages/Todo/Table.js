@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Modal } from "antd";
 import React, { useEffect, useState } from "react";
-
+import { server } from "../../index";
 function Table() {
   const [isLoading, setIsLoading] = useState(true);
   const [documents, setDocuments] = useState([]);
@@ -9,7 +9,7 @@ function Table() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState("Content of the modal");
   const [selectedTodo, setSelectedTodo] = useState({});
-  const PORT = "http://localhost:8000";
+  // const PORT = "http://localhost:8000";
 
   const showModal = (todo) => {
     setOpen(true);
@@ -24,7 +24,7 @@ function Table() {
     const updatedTodo = {
       ...selectedTodo,
     };
-    console.log("selected "+ selectedTodo);
+
     // Update the corresponding todo item in the state
     const updatedDocuments = documents.map((doc) =>
       doc._id === updatedTodo._id ? updatedTodo : doc
@@ -32,7 +32,7 @@ function Table() {
     setDocuments(updatedDocuments);
 
     axios
-      .put(`${PORT}/updateTodo/${selectedTodo._id}`, selectedTodo)
+      .post(`${server}/todo/update/${selectedTodo._id}`, selectedTodo)
       .then((res) => {
         console.log("res", res);
         setOpen(false);
@@ -52,7 +52,7 @@ function Table() {
 
   useEffect(() => {
     axios
-      .get(`${PORT}/readTodos`)
+      .get(`${server}/todo/read`)
       .then((res) => {
         const { data } = res;
         setDocuments(data);
@@ -65,12 +65,12 @@ function Table() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [documents]);
 
   const handleDelete = (todo) => {
     console.log("todo", todo);
     axios
-      .delete(`${PORT}/deleteTodo/${todo._id}`)
+      .delete(`${server}/todo/${todo._id}`)
       .then((res) => {
         const updatedDocuments = documents.filter(
           (doc) => doc._id !== todo._id
@@ -93,7 +93,7 @@ function Table() {
         <div className="container">
           <div className="row">
             <div className="col">
-              <h1 className="text-center">Todos</h1>
+              <h1 className="text-center">Todo</h1>
             </div>
           </div>
           <div className="row">
